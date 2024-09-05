@@ -39,9 +39,9 @@
                 </a>
             @endif
 
-            <x-red-button type="submit" class="ml-3">
+            <x-primary-button type="submit" class="ml-3">
                 {{ __('Log in') }}
-            </x-red-button>
+            </x-primary-button>
         </div>
     </form>
 </x-guest-layout>
