@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\EmployeesRequest;
 use Yajra\DataTables\Facades\DataTables;
 
 class EmployeeController extends Controller
@@ -55,6 +57,7 @@ class EmployeeController extends Controller
     {
         //
         $departments = Department::get();
+
         return view('employee.create' , compact(['departments']));
     }
 
@@ -64,9 +67,15 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeesRequest $request)
     {
-        //
+        $validatedData = $request->validated();
+
+        $validatedData['password'] = Hash::make($request->password);
+
+        User::create($validatedData);
+
+        return redirect()->route('employees.index')->with('created', 'Successfully Created!');
     }
 
     /**

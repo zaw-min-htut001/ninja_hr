@@ -8,93 +8,120 @@
     <div class="py-5 mb-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg mb-[40px]">
-                <div class="grid grid-cols-2 gap-4 p-4">
-                    <div class="items-center">
 
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="name">Name</label>
-                            <input id="name" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
+                <form id="employees-form" action="{{ route('employees.store') }}" method="post">
+                    @csrf
+                    <div class="grid grid-cols-2 gap-4 p-4">
+                        <div class="">
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="name">Name</label>
+                                <input name="name" id="name" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" />
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="email">Email</label>
+                                <input name="email" id="email" type="email" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="phone">phone</label>
+                                <input name="phone" id="phone" type="number" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" />
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="nrc_number">NRC number</label>
+                                <input name="nrc_number" id="nrc_number" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="datepicker">Date of Birth</label>
+                                <input name="dob" id="datepicker" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="gender">Gender</label>
+                                <select id="gender" name="gender"
+                                    class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="email">Email</label>
-                            <input id="email" type="email" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
+                        <div class="">
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="employee_id">Employee Id</label>
+                                <input name="employee_id" id="employee_id" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="department_name">Department Name</label>
+                                <select id="department_name" name="department_id"
+                                    class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                    <option disabled selected>Select Department</option>
+                                    @foreach ($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="d-o-join">Date of Join</label>
+                                <input name="d-o-join" id="d-o-join" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="is_present">Is present ?</label>
+                                <select id="is_present" name="is_present"
+                                    class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                    <option value="1">Present</option>
+                                    <option value="0">Not Present</option>
+                                </select>
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="password">Password</label>
+                                <input name="password" id="password" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="address">Address</label>
+                                <textarea name="address" rows="1" id="address" class="form-textarea px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black"></textarea>
+                            </div>
+
                         </div>
 
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="phone">phone</label>
-                            <input id="phone" type="number" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
-                        </div>
-
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="nrc_number">NRC number</label>
-                            <input id="nrc_number" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="dob">Date of Birth</label>
-                            <input id="dob" type="date" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="gender">Gender</label>
-                            <select id="gender"
-                                class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Select Gender</option> <!-- Placeholder option -->
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                        </div>
                     </div>
 
-                    <div class="">
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="employee_id">Employee Id</label>
-                            <input id="employee_id" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="department_name">Department Name</label>
-                            <select id="department_name"
-                                class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Select Department</option>
-                                @foreach ($departments as $department)
-                                    <option value="{{ $department->id }}">{{ $department->title }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="dofjoin">Date of Join</label>
-                            <input id="dofjoin" type="date" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                        </div>
-
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="is_present">Is present ?</label>
-                            <select id="is_present"
-                                class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="">Select</option> <!-- Placeholder option -->
-                                <option value="1">Present</option>
-                                <option value="0">Not Present</option>
-                            </select>
-                        </div>
-
-                        <div class="max-w-lg flex flex-col mb-3">
-                            <label class="block text-lg font-medium text-gray-700" for="address">Address</label>
-                            <textarea id="address" class="form-textarea px-4 py-3 rounded  border-gray-300 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                        </div>
-
+                    <div class="flex justify-center mb-3">
+                        <x-primary-button class="btn btn-wide font-medium">Submit</x-primary-button>
                     </div>
-                </div>
+                </form>
+
             </div>
         </div>
     </div>
 </x-app-layout>
 
 <script type="text/javascript" type="module">
+    // <!-- Scripts -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    // <!-- Laravel Javascript Validation -->
+    <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
+    {!! JsValidator::formRequest('App\Http\Requests\EmployeesRequest', '#employees-form'); !!}
 
-    // Set the max attribute to today's date to disable future dates
-    document.getElementById('dob').max = new Date().toISOString().split('T')[0];
+    flatpickr("#datepicker", {
+        dateFormat: "Y-m-d",
+        maxDate: new Date(), // Restrict to today or past
+        yearSelector: true // Enable the ability to change years
+    });
+
+    flatpickr("#d-o-join", {
+        dateFormat: "Y-m-d",
+        yearSelector: true // Enable the ability to change years
+    });
 
     $(document).ready(function() {
 

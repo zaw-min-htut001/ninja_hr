@@ -7,7 +7,8 @@
 
     <div class="py-5 mb-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-2">
-            <a href="{{ route('employees.create') }}"><button class="btn btn-active btn-neutral">Add new employee</button></a>
+            <a href="{{ route('employees.create') }}"><button class="btn btn-active btn-neutral bg-black text-white">Add new
+                    employee</button></a>
         </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
@@ -41,8 +42,19 @@
     </div>
 </x-app-layout>
 
-<script type="text/javascript" type="module">
+<script>
     $(document).ready(function() {
+         // Check for session message
+         @if(session('created'))
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "{{ session('created') }}", // Ensure the session value is passed
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+
         $('#example').DataTable({
             processing: true,
             serverSide: true,
@@ -54,7 +66,6 @@
                 { data: 'phone', name: 'Phone' },
                 { data: 'department_name', name: 'Department_name'},
                 { data: 'is_present', name: 'Is_present'},
-
             ]
         });
     });
