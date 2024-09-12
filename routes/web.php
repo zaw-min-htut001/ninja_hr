@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 
@@ -25,6 +26,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [PageController::class , 'dashboard'])->name('dashboard');
 
     Route::resource('/employees', EmployeeController::class);
+
+
+    /**
+     * filepond Upload
+     * api Route
+     */
+    Route::post('/upload' ,[UploadController::class , 'store']);
+    Route::delete('/destory' ,[UploadController::class , 'destory']);
 });
 
 Route::middleware('auth')->group(function () {

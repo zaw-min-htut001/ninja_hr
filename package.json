@@ -23,6 +23,10 @@
         "datatables.net-buttons-bs4": "^3.1.2",
         "datatables.net-searchpanes-bs4": "^2.3.2",
         "datatables.net-select-bs4": "^2.0.5",
+        "filepond": "^4.31.1",
+        "filepond-plugin-file-validate-type": "^1.2.9",
+        "filepond-plugin-image-preview": "^4.6.12",
+        "jquery-filepond": "^1.0.0",
         "sweetalert2": "^11.13.2"
     }
 }

@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "proengsoft/laravel-jsvalidation": "^4.9",
+        "spatie/laravel-medialibrary": "^10.15",
         "yajra/laravel-datatables": "^9.0"
     },
     "require-dev": {

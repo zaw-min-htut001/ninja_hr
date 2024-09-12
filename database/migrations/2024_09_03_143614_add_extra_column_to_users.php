@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('employee_id')->nullable();
             $table->bigInteger('department_id');
-            $table->date('d-o-join')->nullable();
+            $table->date('d_o_join')->nullable();
             $table->boolean('is_present')->default(true);
 
         });

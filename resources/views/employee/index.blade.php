@@ -22,6 +22,8 @@
                                 <th>Phone</th>
                                 <th>Department_name</th>
                                 <th>Is_present</th>
+                                <th>Actions</th>
+                                <th>updated_at</th>
                             </tr>
                         </thead>
 
@@ -33,6 +35,8 @@
                                 <th>Phone</th>
                                 <th>Department_name</th>
                                 <th>Is_present</th>
+                                <th>Actions</th>
+                                <th>updated_at</th>
                             </tr>
                         </tfoot>
                     </table>
@@ -55,9 +59,21 @@
             });
         @endif
 
+        @if(session('updated'))
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "{{ session('updated') }}", // Ensure the session value is passed
+                showConfirmButton: false,
+                timer: 1500
+            });
+        @endif
+
         $('#example').DataTable({
             processing: true,
             serverSide: true,
+            responsive : true,
+            fixedHeader: true,
             ajax: "{{ route('employees.index') }}",
             columns: [
                 { data: 'employee_id', name: 'Employee_id'},
@@ -66,7 +82,19 @@
                 { data: 'phone', name: 'Phone' },
                 { data: 'department_name', name: 'Department_name'},
                 { data: 'is_present', name: 'Is_present'},
-            ]
+                { data: 'Actions', name: 'Actions'},
+                { data: 'updated_at', name: 'updated_at'},
+            ],
+            order :[[ 7 , 'desc']],
+            columnDefs : [
+                {
+                    target: 7,
+                    visible: false,
+                },
+            ],
+            language: {
+                processing : '...loading'
+            }
         });
     });
 </script>

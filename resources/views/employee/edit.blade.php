@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Add New Employees') }}
+            {{ __('Edit Employees') }}
         </h2>
     </x-slot>
 
@@ -9,42 +9,43 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg mb-[40px]">
 
-                <form id="employees-form" action="{{ route('employees.store') }}" method="post">
+                <form id="employees-form" method="POST" action="{{ route('employees.update' , $employee->id) }}" >
                     @csrf
+                    @method('PUT')
                     <div class="grid grid-cols-2 gap-4 p-4">
                         <div class="">
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="name">Name</label>
-                                <input name="name" id="name" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" />
+                                <input name="name" id="name" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->name}}" />
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="email">Email</label>
-                                <input name="email" id="email" type="email" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                <input name="email" id="email" type="email" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->email}}"  />
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="phone">phone</label>
-                                <input name="phone" id="phone" type="number" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" />
+                                <input name="phone" id="phone" type="number" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->phone}}" />
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="nrc_number">NRC number</label>
-                                <input name="nrc_number" id="nrc_number" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                <input name="nrc_number" id="nrc_number" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->nrc_number}}" />
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="datepicker">Date of Birth</label>
-                                <input name="dob" id="datepicker" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                <input name="dob" id="datepicker" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->dob}}" />
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="gender">Gender</label>
                                 <select id="gender" name="gender"
                                     class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
+                                    <option @if ($employee->gender == 'male') selected @endif value="male">Male</option>
+                                    <option @if ($employee->gender == 'female') selected @endif value="female">Female</option>
                                 </select>
                             </div>
                         </div>
@@ -52,7 +53,7 @@
                         <div class="">
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="employee_id">Employee Id</label>
-                                <input name="employee_id" id="employee_id" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                <input name="employee_id" id="employee_id" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->employee_id}}">
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
@@ -61,22 +62,22 @@
                                     class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
                                     <option disabled selected>Select Department</option>
                                     @foreach ($departments as $department)
-                                        <option value="{{ $department->id }}">{{ $department->title }}</option>
+                                        <option @if ($employee->department_id == $department->id ) selected @endif value="{{ $department->id }}">{{ $department->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="d-o-join">Date of Join</label>
-                                <input name="d_o_join" id="d-o-join" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                                <input name="d_o_join" id="d-o-join" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black"  value="{{ $employee->d_o_join }}">
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="is_present">Is present ?</label>
                                 <select id="is_present" name="is_present"
                                     class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
-                                    <option value="1">Present</option>
-                                    <option value="0">Not Present</option>
+                                    <option @if ($employee->is_present === 1) selected @endif value="1">Present</option>
+                                    <option @if ($employee->is_present === 0) selected @endif value="0">Not Present</option>
                                 </select>
                             </div>
 
@@ -87,7 +88,7 @@
 
                             <div class="max-w-lg flex flex-col mb-3">
                                 <label class="block text-lg font-medium text-gray-700" for="address">Address</label>
-                                <textarea name="address" rows="1" id="address" class="form-textarea px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black"></textarea>
+                                <textarea name="address" rows="1" id="address" class="form-textarea px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">{{ $employee->address }}</textarea>
                             </div>
 
                             {{-- fileponds --}}
@@ -96,6 +97,7 @@
                                 <input type="file" class="filepond" name="filepond"
                                 data-allow-reorder="true" data-max-file-size="3MB">
                             </div>
+
                         </div>
 
                     </div>
@@ -110,14 +112,14 @@
     </div>
 </x-app-layout>
 
-     <!-- Scripts -->
+// <!-- Scripts -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
-     <!-- Laravel Javascript Validation -->
+    // <!-- Laravel Javascript Validation -->
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
     {!! JsValidator::formRequest('App\Http\Requests\EmployeesRequest', '#employees-form'); !!}
-<script>
 
+<script>
     flatpickr("#datepicker", {
         dateFormat: "Y-m-d",
         maxDate: new Date(), // Restrict to today or past
