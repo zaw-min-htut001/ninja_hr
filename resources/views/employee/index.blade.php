@@ -7,7 +7,8 @@
 
     <div class="py-5 mb-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-2">
-            <a href="{{ route('employees.create') }}"><button class="btn btn-active btn-neutral bg-black text-white">Add new
+            <a href="{{ route('employees.create') }}"><button class="btn btn-active btn-neutral bg-black text-white">Add
+                    new
                     employee</button></a>
         </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -48,8 +49,9 @@
 
 <script>
     $(document).ready(function() {
-         // Check for session message
-         @if(session('created'))
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        // Check for session message
+        @if (session('created'))
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -59,7 +61,7 @@
             });
         @endif
 
-        @if(session('updated'))
+        @if (session('updated'))
             Swal.fire({
                 position: "top-end",
                 icon: "success",
@@ -72,29 +74,91 @@
         $('#example').DataTable({
             processing: true,
             serverSide: true,
-            responsive : true,
+            responsive: true,
             fixedHeader: true,
             ajax: "{{ route('employees.index') }}",
-            columns: [
-                { data: 'employee_id', name: 'Employee_id'},
-                { data: 'name', name: 'Name'},
-                { data: 'email', name: 'Email' },
-                { data: 'phone', name: 'Phone' },
-                { data: 'department_name', name: 'Department_name'},
-                { data: 'is_present', name: 'Is_present'},
-                { data: 'Actions', name: 'Actions'},
-                { data: 'updated_at', name: 'updated_at'},
-            ],
-            order :[[ 7 , 'desc']],
-            columnDefs : [
+            columns: [{
+                    data: 'employee_id',
+                    name: 'Employee_id'
+                },
                 {
-                    target: 7,
-                    visible: false,
+                    data: 'name',
+                    name: 'Name'
+                },
+                {
+                    data: 'email',
+                    name: 'Email'
+                },
+                {
+                    data: 'phone',
+                    name: 'Phone'
+                },
+                {
+                    data: 'department_name',
+                    name: 'Department_name'
+                },
+                {
+                    data: 'is_present',
+                    name: 'Is_present'
+                },
+                {
+                    data: 'Actions',
+                    name: 'Actions'
+                },
+                {
+                    data: 'updated_at',
+                    name: 'updated_at'
                 },
             ],
+            order: [
+                [7, 'desc']
+            ],
+            columnDefs: [{
+                target: 7,
+                visible: false,
+            }, ],
             language: {
-                processing : '...loading'
+                processing: '...loading'
             }
         });
+
+        // Delete record
+        $('#example').on('click', '#deleteItem', function() {
+            var employee = $(this).data('id');
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        type: "DELETE",
+                        url: `employees/${employee}`,
+                        data: {
+                            _token: CSRF_TOKEN,
+                        },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.success === 1) {
+                                Swal.fire({
+                                    title: "Deleted!",
+                                    text: "Your file has been deleted.",
+                                    icon: "success"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        location.reload(true)
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        });
+
     });
 </script>

@@ -1,14 +1,15 @@
 <x-app-layout>
     <div class="bg-gray-100 flex items-center justify-center pt-3">
         <div class="max-w-full md:max-w-lg bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="md:flex leading-8">
+            <div class="md:flex leading-7">
                 <!-- Profile Image -->
-                <div class="md:w-full bg-blue-500">
-                    <img src="{{asset($employee->getFirstMediaUrl('images'))}}" alt="Employee photo" class="w-full h-full object-cover">
+
+                <div class="md:w-1/2 flex justify-center items-center p-4 border-4 border-gray-300 bg-white shadow-lg rounded-lg">
+                    <img src="{{asset($employee->getFirstMediaUrl('images'))}}" alt="Employee photo" class="w-100 h-100 rounded-lg object-cover">
                 </div>
 
                 <!-- Employee Info -->
-                <div class="md:w-screen p-4">
+                <div class="md:w-1/2 p-4">
                     <h2 class="text-xl font-semibold text-gray-800">{{ $employee->name }}</h2>
                     <p class="text-gray-600">{{ $employee->employee_id }}</p>
                     <p class="text-gray-600">{{ $employee->email }}</p>
