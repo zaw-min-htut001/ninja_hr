@@ -6,6 +6,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\DepartmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('/employees', EmployeeController::class);
 
+    Route::resource('/departments', DepartmentController::class);
 
     /**
      * filepond Upload

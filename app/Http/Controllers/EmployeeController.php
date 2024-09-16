@@ -26,6 +26,11 @@ class EmployeeController extends Controller
             $data = User::with('department');
 
             return Datatables::of($data)
+                ->filterColumn('department_name' , function($query , $keyword){
+                    $query->whereHas('department' , function ($q) use ($keyword){
+                        $q->where('title' , 'like' , '%' .$keyword . '%');
+                    });
+                })
                 ->addColumn('department_name' , function ($each){
                     return $each->department ? $each->department->title : '-';
                 })

@@ -1,15 +1,15 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Employees') }}
+            {{ __('Department') }}
         </h2>
     </x-slot>
 
     <div class="py-5 mb-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-2">
-            <a href="{{ route('employees.create') }}"><button class="btn btn-active btn-neutral bg-black text-white">Add
+            <a href="{{ route('departments.create') }}"><button class="btn btn-active btn-neutral bg-black text-white">Add
                     new
-                    employee</button></a>
+                    department</button></a>
         </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
@@ -17,12 +17,7 @@
                     <table id="example" class="display" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Employee_id</th>
                                 <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Department_name</th>
-                                <th>Is_present</th>
                                 <th>Actions</th>
                                 <th>updated_at</th>
                             </tr>
@@ -30,12 +25,7 @@
 
                         <tfoot>
                             <tr>
-                                <th>Employee_id</th>
                                 <th>Name</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Department_name</th>
-                                <th>Is_present</th>
                                 <th>Actions</th>
                                 <th>updated_at</th>
                             </tr>
@@ -77,30 +67,10 @@
             responsive: true,
             fixedHeader: true,
             mark: true,
-            ajax: "{{ route('employees.index') }}",
+            ajax: "{{ route('departments.index') }}",
             columns: [{
-                    data: 'employee_id',
-                    name: 'employee_id'
-                },
-                {
-                    data: 'name',
-                    name: 'name'
-                },
-                {
-                    data: 'email',
-                    name: 'email'
-                },
-                {
-                    data: 'phone',
-                    name: 'phone'
-                },
-                {
-                    data: 'department_name',
-                    name: 'department_name'
-                },
-                {
-                    data: 'is_present',
-                    name: 'is_present'
+                    data: 'title',
+                    name: 'title'
                 },
                 {
                     data: 'Actions',
@@ -112,12 +82,15 @@
                 },
             ],
             order: [
-                [7, 'desc']
+                [2, 'desc']
             ],
             columnDefs: [{
-                target: 7,
+                target: 2,
                 visible: false,
-            }, ],
+            }, {
+                target: 0,
+                className: 'dt-body-center',
+            }],
             language: {
                 processing: '...loading'
             }
@@ -125,7 +98,7 @@
 
         // Delete record
         $('#example').on('click', '#deleteItem', function() {
-            var employee = $(this).data('id');
+            var department = $(this).data('id');
             Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this!",
@@ -138,7 +111,7 @@
                 if (result.value) {
                     $.ajax({
                         type: "DELETE",
-                        url: `employees/${employee}`,
+                        url: `departments/${department}`,
                         data: {
                             _token: CSRF_TOKEN,
                         },
