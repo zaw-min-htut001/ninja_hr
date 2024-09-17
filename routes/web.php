@@ -3,10 +3,12 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
+use App\Http\Controllers\PermissionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/employees', EmployeeController::class);
 
     Route::resource('/departments', DepartmentController::class);
+
+    Route::resource('/roles', RoleController::class);
+
+    Route::resource('/permissions', PermissionController::class);
+
 
     /**
      * filepond Upload

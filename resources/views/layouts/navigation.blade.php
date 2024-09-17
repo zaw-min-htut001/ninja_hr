@@ -80,6 +80,9 @@
                            <h1 class="text-lg">Menu</h1>
                            <li><a href="{{ route('dashboard')}}">Home</a></li>
                            <li><a href="{{ route('employees.index')}}">Employee Management</a></li>
+                           <li><a href="{{ route('departments.index')}}">Department Management</a></li>
+                           <li><a href="{{ route('roles.index')}}">Role Management</a></li>
+                           <li><a href="{{ route('permissions.index')}}">Permissions Management</a></li>
                         </ul>
                     </div>
                 </div>
