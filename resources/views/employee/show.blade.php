@@ -1,15 +1,9 @@
 <x-app-layout>
-    <div class="bg-gray-100 flex items-center justify-center pt-3">
-        <div class="max-w-full md:max-w-lg bg-white rounded-lg shadow-lg overflow-hidden">
-            <div class="md:flex leading-7">
-                <!-- Profile Image -->
-
-                <div class="md:w-1/2 flex justify-center items-center p-4 border-4 border-gray-300 bg-white shadow-lg rounded-lg">
-                    <img src="{{asset($employee->getFirstMediaUrl('images'))}}" alt="Employee photo" class="w-100 h-100 rounded-lg object-cover">
-                </div>
-
+    <div class="flex items-center justify-center pt-3">
+        <div class="relative max-w-full md:max-w-lg bg-white rounded-lg shadow-lg overflow-hidden grid grid-cols-12">
+            <div class="leading-7">
                 <!-- Employee Info -->
-                <div class="md:w-1/2 p-4">
+                <div class="md:w-96 p-4">
                     <h2 class="text-xl font-semibold text-gray-800">{{ $employee->name }}</h2>
                     <p class="text-gray-600">{{ $employee->employee_id }}</p>
                     <p class="text-gray-600">{{ $employee->email }}</p>
@@ -32,8 +26,21 @@
                                 </span>
                             @endif
                         </p>
+                        <p class="text-gray-600"><span class="font-bold">Roles:</span>
+                                @foreach ($employee->roles as $role)
+                                    <span class="p-1 bg-green-500 text-center text-sm text-white rounded-lg">
+                                        {{ $role->name }}
+                                    </span>
+                                @endforeach
+                        </p>
+
                     </div>
                 </div>
+            </div>
+            <!-- Profile Image -->
+
+            <div class="absolute top-2 right-5 w-[200px] h-[200px] rounded-full border-2 border-gray-500 shadow-md">
+                <img src="{{asset($employee->getFirstMediaUrl('images'))}}" alt="Employee photo" class="w-100 h-100 rounded-full object-cover">
             </div>
         </div>
     </div>

@@ -79,10 +79,22 @@
                             {{-- menu --}}
                            <h1 class="text-lg">Menu</h1>
                            <li><a href="{{ route('dashboard')}}">Home</a></li>
-                           <li><a href="{{ route('employees.index')}}">Employee Management</a></li>
-                           <li><a href="{{ route('departments.index')}}">Department Management</a></li>
-                           <li><a href="{{ route('roles.index')}}">Role Management</a></li>
-                           <li><a href="{{ route('permissions.index')}}">Permissions Management</a></li>
+                            @can('view_company')
+                                <li><a href="{{ route('company-setting.index')}}">Company Setting</a></li>
+                            @endcan
+                            @can('create_employee')
+                                <li><a href="{{ route('employees.index')}}">Employee Management</a></li>
+                            @endcan
+                            @can('create_department')
+                                <li><a href="{{ route('departments.index')}}">Department Management</a></li>
+                            @endcan
+                            @can('create_role')
+                                <li><a href="{{ route('roles.index')}}">Role Management</a></li>
+                            @endcan
+                            @can('create_permission')
+                                <li><a href="{{ route('permissions.index')}}">Permissions Management</a></li>
+                            @endcan
+
                         </ul>
                     </div>
                 </div>

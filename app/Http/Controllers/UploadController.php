@@ -11,6 +11,9 @@ class UploadController extends Controller
     //
     public function store(Request $request)
     {
+        if(!auth()->user()->can('create_employee')){
+            abort(403 , 'Forbidden');
+        }
         if($request->hasFile('filepond')){
             $file = $request->file('filepond');
             $fileName = $file->getClientOriginalName();
@@ -29,6 +32,9 @@ class UploadController extends Controller
     //
     public function destory(Request $request)
     {
+        if(!auth()->user()->can('create_employee')){
+            abort(403 , 'Forbidden');
+        }
         $id = $request->getContent();
         $temporaryFile = TemporaryFile::where('folder' , $id)->first();
         $directory = storage_path('app/images/tmp/'.$id);

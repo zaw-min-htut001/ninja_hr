@@ -17,6 +17,9 @@ class PermissionController extends Controller
      */
     public function index(Request $request)
     {
+        if(!auth()->user()->can('create_permission')){
+            abort(403 , 'Forbidden');
+        }
         if ($request->ajax()) {
             $data = Permission::query();
 
@@ -42,6 +45,9 @@ class PermissionController extends Controller
     public function create()
     {
         //
+        if(!auth()->user()->can('create_permission')){
+            abort(403 , 'Forbidden');
+        }
         return view('permission.create');
     }
 
@@ -53,6 +59,9 @@ class PermissionController extends Controller
      */
     public function store(PermissionRequest $request)
     {
+        if(!auth()->user()->can('create_permission')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $Permission = Permission::create($validatedData);
@@ -69,6 +78,9 @@ class PermissionController extends Controller
     public function edit(Permission $permission)
     {
         //
+        if(!auth()->user()->can('edit_permission')){
+            abort(403 , 'Forbidden');
+        }
         return view('permission.edit',  compact(['permission']));
     }
 
@@ -81,6 +93,9 @@ class PermissionController extends Controller
      */
     public function update(UpdatePermission $request, $id)
     {
+        if(!auth()->user()->can('edit_permission')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $Permission = Permission::findOrFail($id);
@@ -98,6 +113,9 @@ class PermissionController extends Controller
      */
     public function destroy(Permission $permission)
     {
+        if(!auth()->user()->can('remove_permission')){
+            abort(403 , 'Forbidden');
+        }
         $deleted = $permission->delete();
 
         if($deleted){

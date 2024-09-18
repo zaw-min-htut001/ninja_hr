@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartmentController;
@@ -36,7 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('/permissions', PermissionController::class);
 
-
+    Route::resource('/company-setting',CompanyController::class)->only(['index' ,'edit', 'update', 'destroy']);
     /**
      * filepond Upload
      * api Route

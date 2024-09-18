@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Department;
 use Illuminate\Http\Request;
 use App\Models\TemporaryFile;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UpdateEmployees;
@@ -22,6 +23,10 @@ class EmployeeController extends Controller
      */
     public function index(Request $request)
     {
+        if(!auth()->user()->can('create_employee')){
+            abort(403 , 'Forbidden');
+        }
+
         if ($request->ajax()) {
             $data = User::with('department');
 
@@ -33,6 +38,16 @@ class EmployeeController extends Controller
                 })
                 ->addColumn('department_name' , function ($each){
                     return $each->department ? $each->department->title : '-';
+                })
+                ->addColumn('roles', function ($each) {
+                    $output = '';
+                    foreach ($each->roles as $role) {
+                        $output .= '
+                            <div class="px-1 py-1 mb-1 text-center bg-black text-white text-sm font-medium rounded-full">
+                                '.$role->name.'
+                            </div>';
+                    };
+                    return $output;
                 })
                 ->addColumn('Actions', function ($each) {
                     $edit_icon = '<a href="'. route('employees.edit' , $each->id ) .'" class="text-amber-500 bg-amber-100 p-1 rounded-lg me-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg></a>';
@@ -54,11 +69,12 @@ class EmployeeController extends Controller
                                 </div>';
                     }
                 })
-                ->rawColumns(['is_present' , 'Actions'])
+                ->rawColumns(['is_present' ,'roles' ,'Actions'])
                 ->make(true);
         }
 
         return view('employee.index');
+
     }
 
     /**
@@ -68,10 +84,12 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+        if(!auth()->user()->can('create_employee')){
+            abort(403 , 'Forbidden');
+        }
         $departments = Department::get();
-
-        return view('employee.create' , compact(['departments']));
+        $roles = Role::all();
+        return view('employee.create' , compact(['departments', 'roles']));
     }
 
     /**
@@ -82,11 +100,16 @@ class EmployeeController extends Controller
      */
     public function store(EmployeesRequest $request)
     {
+        if(!auth()->user()->can('create_employee')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $validatedData['password'] = Hash::make($request->password);
 
         $user = User::create($validatedData);
+
+        $user->assignRole($request->roles);
 
         $temporaryFile = TemporaryFile::where('folder' , $request->filepond)->first();
 
@@ -108,6 +131,9 @@ class EmployeeController extends Controller
      */
     public function show(User $employee)
     {
+        if(!auth()->user()->can('edit_employee')){
+            abort(403 , 'Forbidden');
+        }
         $departments = Department::get();
 
         return view('employee.show',  compact(['employee' ,'departments']));
@@ -122,9 +148,16 @@ class EmployeeController extends Controller
     public function edit(User $employee)
     {
         //
+        if(!auth()->user()->can('edit_employee')){
+            abort(403 , 'Forbidden');
+        }
         $departments = Department::get();
 
-        return view('employee.edit',  compact(['employee' ,'departments']));
+        $roles = Role::all();
+
+        $old_roles = $employee->roles->pluck('id')->toArray();
+
+        return view('employee.edit',  compact(['employee' ,'departments' ,'roles' , 'old_roles']));
     }
 
     /**
@@ -136,6 +169,9 @@ class EmployeeController extends Controller
      */
     public function update(UpdateEmployees $request, $id)
     {
+        if(!auth()->user()->can('edit_employee')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $validatedData['password'] = Hash::make($request->password);
@@ -143,6 +179,8 @@ class EmployeeController extends Controller
         $user = User::findOrFail($id);
 
         $user->update($validatedData);
+
+        $user->syncRoles($request->roles);
 
         $temporaryFile = TemporaryFile::where('folder' , $request->filepond)->first();
 
@@ -168,6 +206,9 @@ class EmployeeController extends Controller
      */
     public function destroy(User $employee)
     {
+        if(!auth()->user()->can('remove_employee')){
+            abort(403 , 'Forbidden');
+        }
         $deleted = $employee->delete();
 
         if($deleted){

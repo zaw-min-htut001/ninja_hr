@@ -17,6 +17,9 @@ class DepartmentController extends Controller
      */
     public function index(Request $request)
     {
+        if(!auth()->user()->can('create_department')){
+            abort(403 , 'Forbidden');
+        }
         if ($request->ajax()) {
             $data = Department::query();
 
@@ -42,6 +45,9 @@ class DepartmentController extends Controller
     public function create()
     {
         //
+        if(!auth()->user()->can('create_department')){
+            abort(403 , 'Forbidden');
+        }
         return view('department.create');
     }
 
@@ -53,6 +59,9 @@ class DepartmentController extends Controller
      */
     public function store(DepartmentRequest $request)
     {
+        if(!auth()->user()->can('create_department')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $department = Department::create($validatedData);
@@ -69,6 +78,9 @@ class DepartmentController extends Controller
     public function edit(Department $department)
     {
         //
+        if(!auth()->user()->can('edit_department')){
+            abort(403 , 'Forbidden');
+        }
         return view('department.edit',  compact(['department']));
     }
 
@@ -81,6 +93,9 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartment $request, $id)
     {
+        if(!auth()->user()->can('edit_department')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $department = Department::findOrFail($id);
@@ -98,6 +113,9 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
+        if(!auth()->user()->can('remove_department')){
+            abort(403 , 'Forbidden');
+        }
         $deleted = $department->delete();
 
         if($deleted){

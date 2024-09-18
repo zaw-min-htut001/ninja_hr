@@ -23,6 +23,7 @@
                                 <th>Phone</th>
                                 <th>Department_name</th>
                                 <th>Is_present</th>
+                                <th>Roles</th>
                                 <th>Actions</th>
                                 <th>updated_at</th>
                             </tr>
@@ -36,6 +37,7 @@
                                 <th>Phone</th>
                                 <th>Department_name</th>
                                 <th>Is_present</th>
+                                <th>Roles</th>
                                 <th>Actions</th>
                                 <th>updated_at</th>
                             </tr>
@@ -103,6 +105,10 @@
                     name: 'is_present'
                 },
                 {
+                    data: 'roles',
+                    name: 'roles'
+                },
+                {
                     data: 'Actions',
                     name: 'Actions'
                 },
@@ -112,10 +118,10 @@
                 },
             ],
             order: [
-                [7, 'desc']
+                [8, 'desc']
             ],
             columnDefs: [{
-                target: 7,
+                target: 8,
                 visible: false,
             }, ],
             language: {

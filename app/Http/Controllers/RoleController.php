@@ -18,6 +18,9 @@ class RoleController extends Controller
      */
     public function index(Request $request)
     {
+        if(!auth()->user()->can('create_role')){
+            abort(403 , 'Forbidden');
+        }
         if ($request->ajax()) {
             $data = Role::query();
 
@@ -53,6 +56,9 @@ class RoleController extends Controller
     public function create()
     {
         //
+        if(!auth()->user()->can('create_role')){
+            abort(403 , 'Forbidden');
+        }
         $permissions = Permission::all();
         return view('role.create' , compact('permissions'));
     }
@@ -65,6 +71,9 @@ class RoleController extends Controller
      */
     public function store(RoleRequest $request)
     {
+        if(!auth()->user()->can('create_role')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $role = Role::create($validatedData);
@@ -82,6 +91,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
+        if(!auth()->user()->can('edit_role')){
+            abort(403 , 'Forbidden');
+        }
         $permissions = Permission::all();
 
         $old_permissions = $role->permissions->pluck('id')->toArray();
@@ -98,6 +110,9 @@ class RoleController extends Controller
      */
     public function update(UpdateRole $request, $id)
     {
+        if(!auth()->user()->can('edit_role')){
+            abort(403 , 'Forbidden');
+        }
         $validatedData = $request->validated();
 
         $role = Role::findOrFail($id);
@@ -117,6 +132,9 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
+        if(!auth()->user()->can('remove_role')){
+            abort(403 , 'Forbidden');
+        }
         $deleted = $role->delete();
 
         if($deleted){

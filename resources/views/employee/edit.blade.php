@@ -48,6 +48,15 @@
                                     <option @if ($employee->gender == 'female') selected @endif value="female">Female</option>
                                 </select>
                             </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="role">Role or Designation</label>
+                                <select class="js-example-basic-multiple form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" name="roles[]" multiple="multiple">
+                                    @foreach ($roles as $role)
+                                        <option @if(in_array($role->id , $old_roles)) selected @endif value="{{ $role->name }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
 
                         <div class="">
@@ -112,14 +121,15 @@
     </div>
 </x-app-layout>
 
-// <!-- Scripts -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    // <!-- Laravel Javascript Validation -->
+     <!-- Laravel Javascript Validation -->
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
     {!! JsValidator::formRequest('App\Http\Requests\EmployeesRequest', '#employees-form'); !!}
 
 <script>
+    $(document).ready(function() {
+        $('.js-example-basic-multiple').select2({});
+    });
+
     flatpickr("#datepicker", {
         dateFormat: "Y-m-d",
         maxDate: new Date(), // Restrict to today or past
