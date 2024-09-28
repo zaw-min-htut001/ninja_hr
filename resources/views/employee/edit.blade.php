@@ -57,6 +57,11 @@
                                     @endforeach
                                 </select>
                             </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="pin_code">Pin code</label>
+                                <input name="pin_code" id="pin_code" type="number" value="{{ $employee->pin_code }}" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" />
+                            </div>
                         </div>
 
                         <div class="">

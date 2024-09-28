@@ -1,32 +1,121 @@
-import './bootstrap';
+import "./bootstrap";
 
-import Alpine from 'alpinejs';
+import Alpine from "alpinejs";
 
-import 'bootstrap';
+import "bootstrap";
 
-import * as FilePond from 'filepond';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import * as FilePond from "filepond";
+import "filepond/dist/filepond.min.css";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 
 const inputElement = document.querySelector('input[type="file"].filepond');
 
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+const csrfToken = document
+    .querySelector('meta[name="csrf-token"]')
+    .getAttribute("content");
 
-FilePond.registerPlugin(FilePondPluginImagePreview , FilePondPluginFileValidateType);
+FilePond.registerPlugin(
+    FilePondPluginImagePreview,
+    FilePondPluginFileValidateType
+);
 
 FilePond.create(inputElement).setOptions({
-    acceptedFileTypes: ['image/jpeg' ,'image/png'],
+    acceptedFileTypes: ["image/jpeg", "image/png"],
     server: {
-        process: '/upload',
-        revert: '/destory',
+        process: "/upload",
+        revert: "/destory",
         headers: {
-            'X-CSRF-TOKEN': csrfToken,
-        }
+            "X-CSRF-TOKEN": csrfToken,
+        },
     },
 });
 
 window.Alpine = Alpine;
 
 Alpine.start();
+
+import QrScanner from "qr-scanner"; // Import the Nimiq QR Scanner
+var CSRF_TOKEN = $('meta[name="csrf-token"]').attr("content");
+
+// DOMContentLoaded ensures that the DOM is fully loaded before executing the script
+document.addEventListener("DOMContentLoaded", function () {
+    const videoElem = document.getElementById("qr-video"); // Get the video element
+    const qrScanner = new QrScanner(videoElem, (result) => {
+        $.ajax({
+            type: "POST",
+            url: "/scan-qr",
+            data: {
+                _token: CSRF_TOKEN,
+                date: result,
+            },
+            dataType: "json",
+            success: function (res) {
+                if (res.status === "success") {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        },
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: res.message,
+                    });
+                } else {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "top-end",
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        },
+                    });
+                    Toast.fire({
+                        icon: "error",
+                        title: res.message,
+                    });
+                }
+            },
+        });
+        console.log(result);
+        if (result) {
+            modal.classList.add("hidden");
+            qrScanner.stop(); // Start scanning
+        }
+    });
+    const openModalBtn = document.getElementById("openModalBtn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const closeModalBtn2 = document.getElementById("closeModalBtn2");
+    const modal = document.getElementById("myModal");
+    // Open Modal
+    openModalBtn.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+        qrScanner.start(); // Start scanning
+    });
+    // Close Modal
+    closeModalBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        qrScanner.stop(); // Start scanning
+    });
+    closeModalBtn2.addEventListener("click", () => {
+        modal.classList.add("hidden");
+        qrScanner.stop(); // Start scanning
+    });
+    // Close modal when clicking outside of modal content
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.classList.add("hidden");
+            qrScanner.stop();
+        }
+    };
+});

@@ -8,8 +8,11 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\DailyCheckController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\CheckInCheckOutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +41,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/permissions', PermissionController::class);
 
     Route::resource('/company-setting',CompanyController::class)->only(['index' ,'edit', 'update', 'destroy']);
+
+    Route::resource('/check-in/check-out', CheckInCheckOutController::class);
+
+    Route::resource('/attendance', AttendanceController::class);
+
+    Route::get('/scan-qr', [DailyCheckController::class, 'index'])->name('dailycheckin.index');
+    Route::post('/scan-qr', [DailyCheckController::class, 'scanQr'])->name('dailycheckin.scanQr');
+
     /**
      * filepond Upload
      * api Route

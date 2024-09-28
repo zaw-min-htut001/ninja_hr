@@ -77,8 +77,14 @@
                             </li>
                             <hr>
                             {{-- menu --}}
-                           <h1 class="text-lg">Menu</h1>
-                           <li><a href="{{ route('dashboard')}}">Home</a></li>
+                            <h1 class="text-lg">Menu</h1>
+                            <li><a href="{{ route('dashboard')}}">Home</a></li>
+                            @can('view_check_in')
+                            <li><a href="{{ route('check-out.index')}}">Check In</a></li>
+                            @endcan
+                            @can('view_attendance')
+                            <li><a href="{{ route('attendance.index')}}">Attendance</a></li>
+                            @endcan
                             @can('view_company')
                                 <li><a href="{{ route('company-setting.index')}}">Company Setting</a></li>
                             @endcan

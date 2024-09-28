@@ -100,6 +100,7 @@ class EmployeeController extends Controller
      */
     public function store(EmployeesRequest $request)
     {
+        // dd($request->all());
         if(!auth()->user()->can('create_employee')){
             abort(403 , 'Forbidden');
         }

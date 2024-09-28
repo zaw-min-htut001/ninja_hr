@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\CheckIn;
 use App\Models\Department;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
@@ -36,6 +37,7 @@ class User extends Authenticatable implements HasMedia
             'department_id',
             'd_o_join',
             'is_present',
+            'pin_code'
     ];
 
     /**

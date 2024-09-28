@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg border-2 border-b-black">
+            <div class="mb-5 bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg border-2 border-b-black">
                 <div class="p-6 text-gray-900 dark:text-gray-100 text-center leading-9">
                     {{ __("You're logged in as ") }}  -  {{ Auth::user()->name}}
                     <div class="border-t my-2 py-3">
@@ -23,6 +23,20 @@
                                 </span>
                             @endforeach
                         </h1>
+                        <div class="flex justify-center gap-2">
+                            @can('view_check_in')
+                        <div class="mt-3">
+                            <a href="{{ route('check-out.index') }}">
+                                <button class="btn btn-sm btn-outline text-black btn-warning">Checks in with pin code</button>
+                            </a>
+                        </div>
+                        @endcan
+                        <div class="mt-3">
+                            <a href="{{ route('dailycheckin.index') }}">
+                                <button class="btn btn-sm btn-outline text-black btn-success">Daily Checks in/out</button>
+                            </a>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>

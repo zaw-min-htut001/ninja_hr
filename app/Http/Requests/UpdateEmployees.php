@@ -53,6 +53,10 @@ class UpdateEmployees extends FormRequest
             'department_id' => 'required' ,
             'd_o_join' => 'required' ,
             'is_present' => 'required' ,
+            'pin_code' => [
+                'required',
+                Rule::unique('users', 'pin_code')->ignore($id),
+            ],
         ];
     }
 }

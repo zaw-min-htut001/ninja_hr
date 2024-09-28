@@ -36,6 +36,7 @@ class EmployeesRequest extends FormRequest
             'department_id' => 'required' ,
             'd_o_join' => 'required' ,
             'is_present' => 'required' ,
+            'pin_code' => 'required|unique:users|min:6|max:6' ,
         ];
     }
 }

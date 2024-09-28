@@ -33,6 +33,7 @@
                                     </span>
                                 @endforeach
                         </p>
+                        <p class="text-gray-600"><span class="font-bold">Pin Code:</span> {{ $employee->pin_code }}</p>
 
                     </div>
                 </div>
