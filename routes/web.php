@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/check-in/check-out', CheckInCheckOutController::class);
 
     Route::resource('/attendance', AttendanceController::class);
+    Route::get('/attendance-overview-table', [AttendanceController::class, 'overviewTable'])->name('attendance.attendance-overview-table');
 
     Route::get('/scan-qr', [DailyCheckController::class, 'index'])->name('dailycheckin.index');
     Route::post('/scan-qr', [DailyCheckController::class, 'scanQr'])->name('dailycheckin.scanQr');
