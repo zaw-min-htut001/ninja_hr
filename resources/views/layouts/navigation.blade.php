@@ -79,6 +79,9 @@
                             {{-- menu --}}
                             <h1 class="text-lg">Menu</h1>
                             <li><a href="{{ route('dashboard')}}">Home</a></li>
+                            @can('view_my_attendance_history')
+                            <li><a href="{{ route('attendance.attendance-history')}}">My attendance history</a></li>
+                            @endcan
                             @can('view_check_in')
                             <li><a href="{{ route('check-out.index')}}">Check In</a></li>
                             @endcan

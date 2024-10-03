@@ -46,6 +46,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('/attendance', AttendanceController::class);
     Route::get('/attendance-overview-table', [AttendanceController::class, 'overviewTable'])->name('attendance.attendance-overview-table');
+    Route::get('/attendance-history', [AttendanceController::class, 'attendanceHistory'])->name('attendance.attendance-history');
+    Route::get('/my-attendance-overview-table', [AttendanceController::class, 'myOverviewTable'])->name('my-attendance-overview-table');
 
     Route::get('/scan-qr', [DailyCheckController::class, 'index'])->name('dailycheckin.index');
     Route::post('/scan-qr', [DailyCheckController::class, 'scanQr'])->name('dailycheckin.scanQr');

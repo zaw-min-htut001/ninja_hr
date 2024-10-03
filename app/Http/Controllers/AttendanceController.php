@@ -8,6 +8,7 @@ use App\Models\CheckIn;
 use App\Models\Company;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -80,6 +81,58 @@ class AttendanceController extends Controller
         return view('components.table_overview' ,compact('periods' , 'employees' , 'attendaces' , 'companySetting'))->render();
     }
 
+    public function attendanceHistory(Request $request)
+    {
+        if(!auth()->user()->can('view_my_attendance_history')){
+            abort(403 , 'Forbidden');
+        }
+        if ($request->ajax()) {
+            $data = CheckIn::with('user')->where('user_id' , Auth::user()->id);
+            if($request->month){
+                $data =$data->whereMonth('date' ,$request->month);
+            }
+            if($request->year){
+                $data =$data->whereYear('date' ,$request->year);
+            }
+            return Datatables::of($data)
+                ->filterColumn('employee_id' , function($query , $keyword){
+                    $query->whereHas('user' , function ($q) use ($keyword){
+                        $q->where('employee_id' , 'like' , '%' .$keyword . '%');
+                    });
+                })
+                ->filterColumn('name' , function($query , $keyword){
+                    $query->whereHas('user' , function ($q) use ($keyword){
+                        $q->where('name' , 'like' , '%' .$keyword . '%');
+                    });
+                })
+                ->addColumn('employee_id' , function ($each){
+                    return $each->user ? $each->user->employee_id : '-';
+                })
+                ->addColumn('name' , function ($each){
+                    return $each->user ? $each->user->name : '-';
+                })
+                ->make(true);
+        }
+
+        return view('attendance.history');
+    }
+
+    public function myOverviewTable(Request $request)
+    {
+        if(!auth()->user()->can('view_my_attendance_history')){
+            abort(403 , 'Forbidden');
+        }
+        $month =$request->month;
+        $year =$request->year;
+        $start_of_month = $year . '-' . $month  .'-'. '01';
+        $end_of_month =Carbon::parse($start_of_month)->endOfMonth()->format('Y-m-d');
+
+        $periods = new CarbonPeriod($start_of_month , $end_of_month);
+        $employees =User::orderBy('employee_id')->where('id' , Auth::user()->id)->get();
+        $attendaces = CheckIn::whereMonth('date' ,$month)->whereYear('date' ,$year)->get();
+        $companySetting = Company::find(1);
+        return view('components.table_overview' ,compact('periods' , 'employees' , 'attendaces' , 'companySetting'))->render();
+    }
     /**
      * Store a newly created resource in storage.
      *
