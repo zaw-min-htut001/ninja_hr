@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ProfileController;
@@ -39,6 +40,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/roles', RoleController::class);
 
     Route::resource('/permissions', PermissionController::class);
+
+    Route::resource('/salary', SalaryController::class)->only(['index' ,'create','edit', 'update', 'destroy' , 'store']);
 
     Route::resource('/company-setting',CompanyController::class)->only(['index' ,'edit', 'update', 'destroy']);
 
