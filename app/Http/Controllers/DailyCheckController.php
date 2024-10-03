@@ -18,6 +18,13 @@ class DailyCheckController extends Controller
     public function scanQr(Request $request)
     {
 
+        if(now()->format('D') === 'Sat' || now()->format('D') === 'Sun'){
+            return response()->json([
+                'status' => 'fail',
+                'message' => 'Today is Off Day!',
+            ]);
+        }
+
         if(date('Y-m-d') !== $request->date){
             return response()->json([
                 'status' => 'fail',

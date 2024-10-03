@@ -7,7 +7,10 @@
                     <tr>
                         <th class="border border-slate-300 text-center">Employee Id</th>
                         @foreach ($periods as $period)
-                        <th class="border border-slate-300 text-center">{{ $period->format('d') }}</th>
+                        <th @if ($period->format('D') == 'Sat' || $period->format('D') === 'Sun') class='bg-red-300
+                            border border-slate-300 text-center' @endif
+                            class="border border-slate-300 text-center">{{ $period->format('d') }}
+                            {{ $period->format('D') }}</th>
                         @endforeach
                     </tr>
                 </thead>
@@ -24,6 +27,8 @@
                         ->where('user_id', $employee->id)
                         ->where('date', $period->format('Y-m-d'))
                         ->first();
+
+                        if ($attendance) {
                         if ($attendance->check_in <= $companySetting->office_start_time) {
                             $icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="size-6 text-green-700">
@@ -31,7 +36,7 @@
                                     d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                             </svg>
                             ';
-                            } else if (
+                            } elseif (
                             $attendance->check_in > $companySetting->office_start_time &&
                             $attendance->check_in < $companySetting->break_start_time
                                 ) {
@@ -40,7 +45,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                 </svg>';
-                                }else{
+                                } else {
                                 $icon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6 text-red-600">
                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -48,39 +53,46 @@
                                 </svg>
                                 ';
                                 }
-
-
-                                if ($attendance->check_in <= $companySetting->break_end_time) {
-                            $checkouticon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                stroke-width="1.5" stroke="currentColor" class="size-6 text-green-700">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                            ';
-                            } else if (
-                            $attendance->check_out < $companySetting->office_end_time &&
-                            $attendance->check_out > $companySetting->break_end_time
-                                ) {
-                                $checkouticon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6  text-yellow-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>';
-                                }else{
-                                $checkouticon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6 text-red-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                                ';
                                 }
-                                @endphp
-                                <td class="border border-slate-300 text-center">
-                                    <div>{!! $icon !!}</div>
-                                    <div>{!! $checkouticon !!}</div>
 
-                                </td>
-                                @endforeach
+                                if ($attendance) {
+                                if ($attendance->check_in <= $companySetting->break_end_time) {
+                                    $checkouticon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                        class="size-6 text-green-700">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                    ';
+                                    } elseif (
+                                    $attendance->check_out < $companySetting->office_end_time &&
+                                        $attendance->check_out > $companySetting->break_end_time
+                                        ) {
+                                        $checkouticon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                            class="size-6  text-yellow-400">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>';
+                                        } else {
+                                        $checkouticon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                            class="size-6 text-red-600">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15 12H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                        </svg>
+                                        ';
+                                        }
+                                        }
+                                        @endphp
+                                        <td @if ($period->format('D') == 'Sat' || $period->format('D') === 'Sun')
+                                            class='bg-red-100 border border-slate-300 text-center' @endif
+                                            class="border border-slate-300 text-center">
+                                            <div>{!! $icon !!}</div>
+                                            <div>{!! $checkouticon !!}</div>
+
+                                        </td>
+                                        @endforeach
                     </tr>
                     @endforeach
                 </tbody>

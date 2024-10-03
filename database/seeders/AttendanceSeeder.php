@@ -21,14 +21,16 @@ class AttendanceSeeder extends Seeder
         //
         $users = User::all();
         foreach ($users as $user) {
-            $periods = new CarbonPeriod('2023-07-01' , '2024-10-31');
+            $periods = new CarbonPeriod('2023-10-01' , '2024-10-31');
             foreach ($periods as $period) {
+            if($period->format('D') != 'Sat' && $period->format('D') != 'Sun'){
                 $attendance = new CheckIn();
                 $attendance->user_id = $user->id;
                 $attendance->check_in =Carbon::createFromTime(9, rand(1,29))->toTimeString();
                 $attendance->check_out =Carbon::createFromTime(18, rand(1,5))->toTimeString();
                 $attendance->date = $period->format('Y-m-d');
                 $attendance->save();
+            }
             }
         }
     }
