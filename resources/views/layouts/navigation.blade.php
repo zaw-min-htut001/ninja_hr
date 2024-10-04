@@ -88,6 +88,12 @@
                             @can('view_attendance')
                             <li><a href="{{ route('attendance.index')}}">Attendance</a></li>
                             @endcan
+                            @can('view_payroll')
+                            <li><a href="{{ route('payroll.index')}}">PayRoll</a></li>
+                            @endcan
+                            @can('create_salary')
+                            <li><a href="{{ route('salary.index')}}">Salary Management</a></li>
+                            @endcan
                             @can('view_company')
                                 <li><a href="{{ route('company-setting.index')}}">Company Setting</a></li>
                             @endcan

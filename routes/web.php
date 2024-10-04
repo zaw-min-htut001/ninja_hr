@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\AttendanceController;
@@ -40,6 +41,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/roles', RoleController::class);
 
     Route::resource('/permissions', PermissionController::class);
+
+    Route::resource('/payroll', PayrollController::class);
+    Route::get('/payroll-overview-table', [PayrollController::class, 'payrolloverviewTable'])->name('payroll.payroll-overview-table');
+    Route::get('/my-payroll-overview-table', [PayrollController::class, 'myOverviewTable'])->name('my-attendance-overview-table');
 
     Route::resource('/salary', SalaryController::class)->only(['index' ,'create','edit', 'update', 'destroy' , 'store']);
 

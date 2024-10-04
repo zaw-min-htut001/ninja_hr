@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Salary;
 use App\Models\CheckIn;
 use App\Models\Department;
 use Laravel\Sanctum\HasApiTokens;
@@ -72,5 +73,14 @@ class User extends Authenticatable implements HasMedia
     public function department(): BelongsTo
     {
         return $this->belongsTo(Department::class, 'department_id', 'id');
+    }
+
+    /**
+     * Get all of the comments for the User
+     *
+     */
+    public function salaries()
+    {
+        return $this->hasMany(Salary::class, 'user_id', 'id');
     }
 }

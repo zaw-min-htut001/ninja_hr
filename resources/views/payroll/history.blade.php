@@ -35,8 +35,6 @@
                 <button id='search' class="btn btn-sm btn-primary">search ...</button>
             </div>
         </div>
-        <div id="payroll_overview" class="mb-3"></div>
-
         <div id="table_overview"></div>
     </div>
 
@@ -128,23 +126,9 @@
             table.ajax.url(`/attendance-history?month=${month}&year=${year}`).load();
         }
 
-        payroll_overview();
-
-        function payroll_overview(){
-            var month = $('.month').val();
-            var year = $('.year').val();
-            $.ajax({
-                url : `/my-payroll-overview-table?month=${month}&year=${year}` ,
-                type : 'GET' ,
-                success : function(res){
-                    $('#payroll_overview').html(res);
-                }
-            })
-        }
         $('#search').on('click', function(e) {
             e.preventDefault();
             attendance_overview();
-            payroll_overview();
         });
     });
 </script>
