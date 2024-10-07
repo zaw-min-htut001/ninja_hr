@@ -83,4 +83,5 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(Salary::class, 'user_id', 'id');
     }
+
 }

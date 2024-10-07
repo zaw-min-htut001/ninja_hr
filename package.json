@@ -28,6 +28,7 @@
         "filepond-plugin-image-preview": "^4.6.12",
         "jquery-filepond": "^1.0.0",
         "qr-scanner": "^1.4.2",
-        "sweetalert2": "^11.13.2"
+        "sweetalert2": "^11.13.2",
+        "viewerjs": "^1.11.6"
     }
 }

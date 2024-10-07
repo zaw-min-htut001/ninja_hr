@@ -11,6 +11,9 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type";
 
 const inputElement = document.querySelector('input[type="file"].filepond');
+const inputElement1 = document.querySelector('input[type="file"].filepond1');
+const inputElement2 = document.querySelector('input[type="file"]#fileupload');
+
 
 const csrfToken = document
     .querySelector('meta[name="csrf-token"]')
@@ -32,6 +35,33 @@ FilePond.create(inputElement).setOptions({
     },
 });
 
+FilePond.create(inputElement1).setOptions({
+    acceptedFileTypes: ['image/*'], // Accept only images
+    allowMultiple: true,            // Allow multiple file uploads
+    maxFileSize: '3MB',             // Limit file size
+    maxFiles: 5,
+    server: {
+        process: "/upload-multi",
+        revert: "/destory-images",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+    },
+});
+
+FilePond.create(inputElement2).setOptions({
+    acceptedFileTypes:  ['application/pdf'],
+    allowMultiple: true,            // Allow multiple file uploads
+    maxFileSize: '3MB',             // Limit file size
+    maxFiles: 5,
+    server: {
+        process: "/upload-files",
+        revert: "/destory-files",
+        headers: {
+            "X-CSRF-TOKEN": csrfToken,
+        },
+    },
+});
 window.Alpine = Alpine;
 
 Alpine.start();
@@ -119,3 +149,14 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     };
 });
+
+
+import Viewer from 'viewerjs';
+import 'viewerjs/dist/viewer.css';
+// View an image.
+// View an image.
+const viewer = new Viewer(document.getElementById('image'), {
+    viewed() {
+      viewer.zoomTo(1);
+    },
+  });
