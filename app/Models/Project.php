@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Task;
 use App\Models\User;
 use Spatie\MediaLibrary\HasMedia;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
@@ -45,5 +47,15 @@ class Project extends Model implements HasMedia
     public function members(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'project_members' , 'project_id', 'user_id');
+    }
+
+     /**
+     * Get all of the comments for the Project
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class, 'project_id', 'id');
     }
 }

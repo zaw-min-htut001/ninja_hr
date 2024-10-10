@@ -155,8 +155,18 @@ import Viewer from 'viewerjs';
 import 'viewerjs/dist/viewer.css';
 // View an image.
 // View an image.
-const viewer = new Viewer(document.getElementById('image'), {
+const viewer1 = new Viewer(document.getElementById('image1'), {
     viewed() {
-      viewer.zoomTo(1);
+      viewer1.zoomTo(1);
     },
-  });
+});
+const viewer2 = new Viewer(document.getElementById('image2'), {
+    viewed() {
+      viewer2.zoomTo(1);
+    },
+});
+const viewer3 = new Viewer(document.getElementById('image3'), {
+    viewed() {
+      viewer3.zoomTo(1);
+    },
+});

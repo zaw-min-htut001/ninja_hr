@@ -43,7 +43,7 @@
             <div class="col-span-1">
                 <div class="col-span-5 leading-5 border p-3 border-gray-600 shadow-md rounded">
                     <p class='text-xl font-normal'>Leaders </p>
-                    <div class="flex flex-wrap justify-around items-center mt-2 gap-1">
+                    <div id='image1' class="flex flex-wrap justify-around items-center mt-2 gap-1">
                         @foreach($leaderImages as $images)
                         @foreach($images as $image)
                         <img class="rounded-full border-gray-600 object-cover" style="width: 30px; height : 30px" src="{{ $image->getUrl() }}" alt="" srcset="">
@@ -54,7 +54,7 @@
 
                 <div class="col-span-5 leading-5 border p-3 border-gray-600 shadow-md rounded">
                     <p class='text-xl font-normal'>Members </p>
-                    <div class="flex flex-wrap justify-around items-center  mt-2 gap-1">
+                    <div id='image2' class="flex flex-wrap justify-around items-center  mt-2 gap-1">
                         @foreach($memberImages as $images)
                         @foreach($images as $image)
                         <img class="rounded-full border-gray-600 object-cover" style="width: 30px; height : 30px" src="{{ $image->getUrl() }}" alt="" srcset="">
@@ -67,7 +67,7 @@
 
         <div class="text-2xl font-medium mt-3 ms-1">Images</div>
 
-        <div  id='image'  class="flex justify-items-start space-x-2 mt-2 ms-1">
+        <div  id='image3'  class="flex justify-items-start space-x-2 mt-2 ms-1">
             @foreach ($project->getMedia("images") as $image)
             <img class="object-cover" style="width: 200px; height : 120px" src="{{ asset($image->getFullUrl()) }}" alt="" srcset="">
             @endforeach

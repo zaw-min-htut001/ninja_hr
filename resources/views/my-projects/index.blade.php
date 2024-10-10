@@ -6,11 +6,6 @@
     </x-slot>
 
     <div class="py-5 mb-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-2">
-            <a href="{{ route('project.create') }}"><button class="btn btn-active btn-neutral bg-black text-white">Add
-                    new
-                    project</button></a>
-        </div>
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -49,35 +44,13 @@
 
 <script>
     $(document).ready(function() {
-        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        // Check for session message
-        @if (session('created'))
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "{{ session('created') }}", // Ensure the session value is passed
-                showConfirmButton: false,
-                timer: 1500
-            });
-        @endif
-
-        @if (session('updated'))
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: "{{ session('updated') }}", // Ensure the session value is passed
-                showConfirmButton: false,
-                timer: 1500
-            });
-        @endif
-
         $('#example').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
             fixedHeader: true,
             mark: true,
-            ajax: "{{ route('project.index') }}",
+            ajax: "{{ route('my-project.index') }}",
             columns: [{
                     data: 'title',
                     name: 'title'
@@ -121,44 +94,6 @@
             language: {
                 processing: '...loading'
             }
-        });
-
-        // Delete record
-        $('#example').on('click', '#deleteItem', function() {
-            var project = $(this).data('id');
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        type: "DELETE",
-                        url: `project/${project}`,
-                        data: {
-                            _token: CSRF_TOKEN,
-                        },
-                        dataType: 'json',
-                        success: function(res) {
-                            if (res.success === 1) {
-                                Swal.fire({
-                                    title: "Deleted!",
-                                    text: "Your file has been deleted.",
-                                    icon: "success"
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        location.reload(true)
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
-            });
         });
 
     });

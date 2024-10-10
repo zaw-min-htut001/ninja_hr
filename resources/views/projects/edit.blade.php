@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Edit Employees') }}
+            {{ __('Edit project') }}
         </h2>
     </x-slot>
 
@@ -9,111 +9,86 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-lg sm:rounded-lg mb-[40px]">
 
-                <form id="employees-form" method="POST" action="{{ route('employees.update' , $employee->id) }}" >
+                <form id="project-form" action="{{ route('project.update' , $project->id ) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="grid grid-cols-2 gap-4 p-4">
                         <div class="">
-
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="name">Name</label>
-                                <input name="name" id="name" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->name}}" />
+                                <label class="block text-lg font-medium text-gray-700" for="title">Title</label>
+                                <input value="{{ $project->title }}" name="title" id="title" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" />
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="email">Email</label>
-                                <input name="email" id="email" type="email" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->email}}"  />
+                                <label class="block text-lg font-medium text-gray-700" for="description">Description</label>
+                                <textarea name="description" rows="1" id="description" class="form-textarea px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">value="{{ $project->description }}"</textarea>
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="phone">phone</label>
-                                <input name="phone" id="phone" type="number" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->phone}}" />
-                            </div>
-
-                            <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="nrc_number">NRC number</label>
-                                <input name="nrc_number" id="nrc_number" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->nrc_number}}" />
-                            </div>
-
-                            <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="datepicker">Date of Birth</label>
-                                <input name="dob" id="datepicker" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->dob}}" />
-                            </div>
-
-                            <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="gender">Gender</label>
-                                <select id="gender" name="gender"
-                                    class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
-                                    <option @if ($employee->gender == 'male') selected @endif value="male">Male</option>
-                                    <option @if ($employee->gender == 'female') selected @endif value="female">Female</option>
+                                <label class="block text-lg font-medium text-gray-700" for="priority">Priority</label>
+                                <select name="priority" id="priority" class="form-control">
+                                    <option value="" disabled selected>-- Select --</option>
+                                    <option @if ($project->priority == 'high') selected @endif  value="high">High</option>
+                                    <option @if ($project->priority == 'middle') selected @endif  value="middle">Middle</option>
+                                    <option @if ($project->priority == 'low') selected @endif  value="low">Low</option>
                                 </select>
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="role">Role or Designation</label>
-                                <select class="js-example-basic-multiple form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" name="roles[]" multiple="multiple">
-                                    @foreach ($roles as $role)
-                                        <option @if(in_array($role->id , $old_roles)) selected @endif value="{{ $role->name }}">{{ $role->name }}</option>
+                                <label class="block text-lg font-medium text-gray-700" for="leaders">Leaders</label>
+                                <select multiple="multiple" name="leaders[]" id="leaders" class="form-control js-example-basic-multiple">
+                                    <option value="" disabled selected>-- Select --</option>
+                                    @foreach ($employees as $employee)
+                                        <option @if(in_array($employee->id , $oldLeaders)) selected @endif value={{ $employee->id }}>{{ $employee->employee_id }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
+                            {{-- fileponds --}}
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="pin_code">Pin code</label>
-                                <input name="pin_code" id="pin_code" type="number" value="{{ $employee->pin_code }}" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" />
+                                <label class="block text-lg font-medium text-gray-700">Images</label>
+                                <input type="file" class="filepond1" name="images[]" multiple accept="image/*"
+                                data-allow-reorder="true" data-max-file-size="3MB">
                             </div>
                         </div>
 
                         <div class="">
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="employee_id">Employee Id</label>
-                                <input name="employee_id" id="employee_id" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black" value="{{ $employee->employee_id}}">
+                                <label class="block text-lg font-medium text-gray-700" for="datepicker">Start Date</label>
+                                <input value="{{ $project->start_date}}" name="start_date" id="datepicker" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="department_name">Department Name</label>
-                                <select id="department_name" name="department_id"
-                                    class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
-                                    <option disabled selected>Select Department</option>
-                                    @foreach ($departments as $department)
-                                        <option @if ($employee->department_id == $department->id ) selected @endif value="{{ $department->id }}">{{ $department->title }}</option>
+                                <label class="block text-lg font-medium text-gray-700" for="deadline">Deadline</label>
+                                <input value="{{ $project->deadline}}" name="deadline" id="deadline" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="status">Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="" disabled selected>-- Select --</option>
+                                    <option @if ($project->status == 'complete') selected @endif value="complete">Complete</option>
+                                    <option @if ($project->status == 'pending') selected @endif value="pending">Pending</option>
+                                    <option @if ($project->status == 'progess') selected @endif value="progess">Progress</option>
+                                </select>
+                            </div>
+
+                            <div class="max-w-lg flex flex-col mb-3">
+                                <label class="block text-lg font-medium text-gray-700" for="members">Members</label>
+                                <select multiple="multiple" name="members[]" id="members" class="form-control js-example-basic-multiple">
+                                    <option value="" disabled selected>-- Select --</option>
+                                    @foreach ($employees as $employee)
+                                        <option @if(in_array($employee->id , $oldMembers)) selected @endif value={{ $employee->id }}>{{ $employee->employee_id }}</option>
                                     @endforeach
                                 </select>
                             </div>
 
                             <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="d-o-join">Date of Join</label>
-                                <input name="d_o_join" id="d-o-join" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black"  value="{{ $employee->d_o_join }}">
-                            </div>
-
-                            <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="is_present">Is present ?</label>
-                                <select id="is_present" name="is_present"
-                                    class="form-select px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
-                                    <option @if ($employee->is_present === 1) selected @endif value="1">Present</option>
-                                    <option @if ($employee->is_present === 0) selected @endif value="0">Not Present</option>
-                                </select>
-                            </div>
-
-                            <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="password">Password</label>
-                                <input name="password" id="password" type="text" class="form-input px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">
-                            </div>
-
-                            <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700" for="address">Address</label>
-                                <textarea name="address" rows="1" id="address" class="form-textarea px-4 py-3 rounded  border-gray-300 focus:ring-black focus:border-black">{{ $employee->address }}</textarea>
-                            </div>
-
-                            {{-- fileponds --}}
-                            <div class="max-w-lg flex flex-col mb-3">
-                                <label class="block text-lg font-medium text-gray-700">photo</label>
-                                <input type="file" class="filepond" name="filepond"
+                                <label class="block text-lg font-medium text-gray-700">Files</label>
+                                <input type="file" class="filepond2" id='fileupload' name="files[]" multiple accept="application/pdf"
                                 data-allow-reorder="true" data-max-file-size="3MB">
                             </div>
-
                         </div>
-
                     </div>
 
                     <div class="flex justify-center mb-3">
@@ -126,27 +101,16 @@
     </div>
 </x-app-layout>
 
-     <!-- Laravel Javascript Validation -->
+    <!-- Laravel Javascript Validation -->
     <script type="text/javascript" src="{{ asset('vendor/jsvalidation/js/jsvalidation.js')}}"></script>
-    {!! JsValidator::formRequest('App\Http\Requests\EmployeesRequest', '#employees-form'); !!}
-
+    {!! JsValidator::formRequest('App\Http\Requests\Updateproject', '#project-form'); !!}
 <script>
     $(document).ready(function() {
         $('.js-example-basic-multiple').select2({});
     });
 
-    flatpickr("#datepicker", {
-        dateFormat: "Y-m-d",
-        maxDate: new Date(), // Restrict to today or past
-        yearSelector: true // Enable the ability to change years
-    });
-
-    flatpickr("#d-o-join", {
+    flatpickr("#datepicker ,#deadline", {
         dateFormat: "Y-m-d",
         yearSelector: true // Enable the ability to change years
-    });
-
-    $(document).ready(function() {
-
     });
 </script>

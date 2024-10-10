@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\SalaryController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\CompanyController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\MyProjectController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\DailyCheckController;
 use App\Http\Controllers\DepartmentController;
@@ -44,6 +46,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('/permissions', PermissionController::class);
 
     Route::resource('/project', ProjectController::class);
+
+    Route::resource('/my-project', MyProjectController::class)->only(['index' ,'show']);
+
+    Route::resource('/task', TaskController::class);
+    Route::get('/tasks', [TaskController::class, 'getTasks']);
+
 
     Route::resource('/payroll', PayrollController::class);
     Route::get('/payroll-overview-table', [PayrollController::class, 'payrolloverviewTable'])->name('payroll.payroll-overview-table');

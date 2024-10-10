@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Project;
-use App\Models\Department;
 use Illuminate\Support\Str;
 use App\Models\ProjecLeader;
 use Illuminate\Http\Request;
 use App\Models\ProjectMember;
 use App\Models\TemporaryFile;
-use Spatie\Permission\Models\Role;
+use App\Http\Requests\Updateproject;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\ProjectRequest;
-use App\Http\Requests\Updateprojects;
 use Yajra\DataTables\Facades\DataTables;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -45,11 +43,11 @@ class ProjectController extends Controller
                 })
                 ->editColumn('status', function ($each) {
                     if($each->status == 'progess') {
-                        return '<div class="badge badge-success bg-green-600">' . $each->status . '</div>';
+                        return '<div class="badge badge-success bg-blue-600">' . $each->status . '</div>';
                     } elseif ($each->status == 'pending') {
                         return '<div class="badge badge-warning bg-orange-400">' . $each->status . '</div>';
                     } else {
-                        return '<div class="badge badge-error bg-red-600">' . $each->status . '</div>';
+                        return '<div class="badge badge-error bg-green-600">' . $each->status . '</div>';
                     }
                 })
                 ->editColumn('description', function ($each) {
@@ -174,7 +172,6 @@ class ProjectController extends Controller
         }
 
         $members = $project->members;
-
         $memberImages = [];
         foreach ($members as $member) {
             $images = $member->getMedia('images');
@@ -189,57 +186,85 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $project)
+    public function edit(Project $project)
     {
         //
-        if(!auth()->user()->can('edit_project')){
+        if(!auth()->user()->can('create_project')){
             abort(403 , 'Forbidden');
         }
-        $departments = Department::get();
+        $employees = User::all();
+        $oldLeaders = $project->leaders->pluck('id')->toArray();
+        $oldMembers = $project->members->pluck('id')->toArray();
 
-        $roles = Role::all();
-
-        $old_roles = $project->roles->pluck('id')->toArray();
-
-        return view('project.edit',  compact(['project' ,'departments' ,'roles' , 'old_roles']));
+        return view('projects.edit',  compact(['project' ,'employees' , 'oldLeaders' ,'oldMembers']));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Updateprojects  $request
+     * @param  \Illuminate\Http\Updateproject  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Updateprojects $request, $id)
+    public function update(Updateproject $request, $id)
     {
-        if(!auth()->user()->can('edit_project')){
+        if(!auth()->user()->can('create_project')){
             abort(403 , 'Forbidden');
         }
         $validatedData = $request->validated();
 
-        $validatedData['password'] = Hash::make($request->password);
+        $project = Project::findOrFail($id);
 
-        $user = User::findOrFail($id);
+        $project->update($validatedData);
 
-        $user->update($validatedData);
-
-        $user->syncRoles($request->roles);
-
-        $temporaryFile = TemporaryFile::where('folder' , $request->filepond)->first();
-
-        if($temporaryFile){
-            $user->clearMediaCollection('images');
-
-            $user->addMedia(storage_path('app/images/tmp/'.$request->filepond . '/' . $temporaryFile->filename))
-            ->toMediaCollection('images');
-
-            rmdir(storage_path('app/images/tmp/'.$request->filepond));
-
-            $temporaryFile->delete();
+        if($request->has('leaders')){
+            $project->leaders()->sync($request->leaders);
         }
 
-        return redirect()->route('projects.index')->with('updated', 'Successfully Updated!');
+        if($request->has('members')){
+            $project->members()->sync($request->members);
+        }
+
+        if($request->images){
+            $files = $request->images;
+            // dd($files);
+                foreach ($files as $file) {
+                        $decodedFile = json_decode($file, true);
+                        $folderName = $decodedFile[0];
+
+                        $temporaryFile = TemporaryFile::where('folder' ,  $folderName)->first();
+
+                        if($temporaryFile){
+                            $project->clearMediaCollection('images');
+
+                            $project->addMedia(storage_path('app/images/tmp/'. $folderName . '/' . $temporaryFile->filename))
+                            ->toMediaCollection('images');
+                            rmdir(storage_path('app/images/tmp/'. $folderName));
+                            $temporaryFile->delete();
+                        }
+                }
+        }
+
+        if($request->has('files')){
+            $files = $request->input('files');
+
+                foreach ($files as $file) {
+                        $decodedFile = json_decode($file, true);
+                        $folderName = $decodedFile[0];
+                        $temporaryFile2 = TemporaryFile::where('folder' , $folderName)->first();
+
+                        if($temporaryFile2){
+                            $project->clearMediaCollection('files');
+
+                            $project->addMedia(storage_path('app/files/tmp/'. $folderName . '/' . $temporaryFile2->filename))
+                            ->toMediaCollection('files');
+                            rmdir(storage_path('app/files/tmp/'. $folderName));
+                            $temporaryFile2->delete();
+                        }
+                }
+        }
+
+        return redirect()->route('project.index')->with('updated', 'Successfully Updated!');
     }
 
     /**
@@ -248,11 +273,14 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $project)
+    public function destroy(Project $project)
     {
-        if(!auth()->user()->can('remove_project')){
+        if(!auth()->user()->can('create_project')){
             abort(403 , 'Forbidden');
         }
+        $project->leaders()->detach();
+        $project->members()->detach();
+
         $deleted = $project->delete();
 
         if($deleted){
