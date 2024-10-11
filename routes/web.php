@@ -51,6 +51,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('/task', TaskController::class);
     Route::get('/tasks', [TaskController::class, 'getTasks']);
+    Route::get('/draggable', [TaskController::class, 'draggable']);
 
 
     Route::resource('/payroll', PayrollController::class);

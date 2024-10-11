@@ -96,12 +96,98 @@
     </div>
 
 </x-app-layout>
-
+<!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
     var leaders = @json($project->leaders);
     var members = @json($project->members);
     var project_id = {{ $project->id }};
+
+        function initDrag(){
+            var pendingDrag = document.getElementById('pendingDrag');
+            var progressDrag = document.getElementById('progressDrag');
+            var completeDrag = document.getElementById('completeDrag');
+
+            Sortable.create(pendingDrag, {
+                group: "name",
+                sort: true,
+                ghostClass: "sortable-ghost",
+                animation: 150,
+
+                store : {
+                    set: function (sortable) {
+                        var order = sortable.toArray();
+                        localStorage.setItem('pendingDrag' , order.join(','));
+                    },
+                },
+                onSort: function (evt) {
+                    setTimeout(() => {
+                        var pendingDrag =  localStorage.getItem('pendingDrag')
+                        console.log(pendingDrag);
+                        $.ajax({
+                            type : 'GET',
+                            url : `/draggable?project_id=${project_id}&pendingDrag=${pendingDrag}`,
+                            success : function(res){
+                                console.log(res);
+                            }
+                        });
+                    }, 2000);
+                },
+            });
+            Sortable.create(progressDrag, {
+                group: "name",
+                sort: true,
+                ghostClass: "sortable-ghost",
+                animation: 150,
+
+                store : {
+                    set: function (sortable) {
+                        var order = sortable.toArray();
+                        localStorage.setItem('progressDrag' , order.join(','));
+                    },
+                },
+                onSort: function (evt) {
+                    setTimeout(() => {
+                        var progressDrag =  localStorage.getItem('progressDrag')
+                        console.log(progressDrag);
+                        $.ajax({
+                            type : 'GET',
+                            url : `/draggable?project_id=${project_id}&progressDrag=${progressDrag}`,
+                            success : function(res){
+                                console.log(res);
+                            }
+                        });
+                    }, 2000);
+                },
+            });
+            Sortable.create(completeDrag, {
+                group: "name",
+                sort: true,
+                ghostClass: "sortable-ghost",
+                animation: 150,
+
+                store : {
+                    set: function (sortable) {
+                        var order = sortable.toArray();
+                        localStorage.setItem('completeDrag' , order.join(','));
+                    },
+                },
+                onSort: function (evt) {
+                    setTimeout(() => {
+                        var completeDrag =  localStorage.getItem('completeDrag')
+                        console.log(completeDrag);
+                        $.ajax({
+                            type : 'GET',
+                            url : `/draggable?project_id=${project_id}&completeDrag=${completeDrag}`,
+                            success : function(res){
+                                console.log(res);
+                            }
+                        });
+                    }, 2000);
+                },
+            });
+        }
 
     function getTasks() {
         $.ajax({
@@ -109,6 +195,7 @@
             url: `/tasks?id=${project_id}`,
             success: function(res) {
                 $('#tasks').html(res); // Load the tasks
+                initDrag();
             }
         });
     }
@@ -770,5 +857,11 @@
 <style>
     .select2-container--open {
         z-index: 99999999999999;
+    }
+    .sortable-ghost{
+        border: 2px dashed rgb(32, 30, 30) !important;
+        filter: blur(1px) !important;
+        -webkit-filter: blur(1px) !important;
+
     }
 </style>

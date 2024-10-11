@@ -1,8 +1,9 @@
     <!-- Task Card 1 -->
     <div class="bg-yellow-100 shadow-md rounded-lg p-2 border border-gray-200 grid-cols-1">
         <p class="text-center font-medium text-xl mb-1 mt-0">Pending</p>
-        @foreach (collect($project->tasks)->where('status', 'pending') as $task)
-            <div class="border border-gray-300 rounded-md p-1 bg-white leading-9 mb-2">
+        <div id="pendingDrag">
+        @foreach (collect($project->tasks)->sortBy('serial_number')->where('status', 'pending') as $task)
+            <div data-id="{{ $task->id }}" class="border border-gray-300 rounded-md p-1 bg-white leading-9 mb-2">
                 <div class="flex justify-between">
                     <span class="text-lg font-normal">{{ $task->title }}</span>
                     <div>
@@ -61,6 +62,8 @@
                 </div>
             </div>
         @endforeach
+        </div>
+
         {{-- Add Button --}}
         <div class="flex items-center justify-center ">
             <button id='pending' class="bg-blue-700 text-white p-2 mt-2 rounded-full">
@@ -75,8 +78,9 @@
 
     <div class="bg-cyan-200 shadow-md rounded-lg p-2 border border-gray-200 grid-cols-1">
         <p class="text-center font-medium text-xl mb-1 mt-0">Progress</p>
-        @foreach (collect($project->tasks)->where('status', 'progress') as $task)
-            <div class="border border-gray-300 rounded-md p-1 bg-white leading-9 mb-2">
+        <div id="progressDrag">
+        @foreach (collect($project->tasks)->sortBy('serial_number')->where('status', 'progress') as $task)
+            <div data-id="{{ $task->id }}" class="border border-gray-300 rounded-md p-1 bg-white leading-9 mb-2">
                 <div class="flex justify-between">
                     <span class="text-lg font-normal">{{ $task->title }}</span>
                     <div>
@@ -135,6 +139,8 @@
                 </div>
             </div>
         @endforeach
+        </div>
+
         {{-- Add Button --}}
         <div class="flex items-center justify-center ">
             <button id='progress' class="bg-blue-700 text-white p-2 mt-2 rounded-full">
@@ -149,9 +155,9 @@
 
     <div class="bg-green-400 shadow-md rounded-lg p-2 border border-gray-200 grid-cols-1">
         <p class="text-center font-medium text-xl mb-1 mt-0">Complete</p>
-
-        @foreach (collect($project->tasks)->where('status', 'complete') as $task)
-            <div class="border border-gray-300 rounded-md p-1 bg-white leading-9 mb-2">
+        <div id="completeDrag">
+        @foreach (collect($project->tasks)->sortBy('serial_number')->where('status', 'complete') as $task)
+            <div data-id="{{ $task->id }}" class="border border-gray-300 rounded-md p-1 bg-white leading-9 mb-2">
                 <div class="flex justify-between">
                     <span class="text-lg font-normal">{{ $task->title }}</span>
                     <div>
@@ -211,6 +217,8 @@
                 </div>
             </div>
         @endforeach
+    </div>
+
         {{-- Add Button --}}
         <div class="flex items-center justify-center ">
             <button id='complete' class="bg-blue-700 text-white p-2 mt-2 rounded-full">

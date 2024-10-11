@@ -108,6 +108,45 @@ class TaskController extends Controller
         return 'success';
     }
 
+    public function draggable(Request $request)
+    {
+        $project = Project::with('tasks.members')->findOrFail($request->project_id);
+
+        if($request->pendingDrag){
+            $pendingDrag = explode(',' , $request->pendingDrag);
+            foreach ($pendingDrag as $key => $task_id) {
+                $task = collect($project->tasks)->where('id' ,$task_id)->first();
+                if($task){
+                    $task->serial_number =$key;
+                    $task->status = 'pending';
+                    $task->update();
+                }
+            }
+        }
+        if($request->progressDrag){
+            $progressDrag = explode(',' , $request->progressDrag);
+            foreach ($progressDrag as $key => $task_id) {
+                $task = collect($project->tasks)->where('id' ,$task_id)->first();
+                if($task){
+                    $task->serial_number =$key;
+                    $task->status = 'progress';
+                    $task->update();
+                }
+            }
+        }
+        if($request->completeDrag){
+            $completeDrag = explode(',' , $request->completeDrag);
+            foreach ($completeDrag as $key => $task_id) {
+                $task = collect($project->tasks)->where('id' ,$task_id)->first();
+                if($task){
+                    $task->serial_number =$key;
+                    $task->status = 'complete';
+                    $task->update();
+                }
+            }
+        }
+        return 'success';
+    }
     /**
      * Remove the specified resource from storage.
      *

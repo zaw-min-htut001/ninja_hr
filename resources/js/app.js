@@ -170,3 +170,5 @@ const viewer3 = new Viewer(document.getElementById('image3'), {
       viewer3.zoomTo(1);
     },
 });
+
+
